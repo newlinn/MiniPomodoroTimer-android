@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v4.app.NotificationCompat;
 
 import java.lang.reflect.Field;
 
@@ -28,11 +27,11 @@ public class AlarmNotification {
         this.context = context;
         notificationMgr = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         appIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
-        notification = new NotificationCompat.Builder(this.context)
-                .setContentTitle("番茄计时器")
+        notification = new Notification.Builder(this.context)
+                .setContentTitle("鐣寗鏃堕棿姝ｅ湪杩愯")
                 .setContentText("ContentText")
                 .setSmallIcon(R.drawable.ic_launcher)
-                .setTicker("正在运行")
+                .setTicker("鐣寗鏃堕棿姝ｅ湪杩愯")
                 .setContentInfo("")
                 .setLargeIcon(appIcon)
                 .setSound(null)
@@ -67,12 +66,12 @@ public class AlarmNotification {
 
     public void showMinuteNotify(int minute)
     {
-        notification = new NotificationCompat.Builder(this.context)
-                .setContentTitle("番茄计时器")
+        notification = new Notification.Builder(this.context)
+                .setContentTitle("鐣寗鏃堕棿姝ｅ湪杩愯")
                 .setContentText("ContentText")
                 .setSmallIcon(getMinuteIcon(minute))
-                .setTicker("剩余时间")
-                .setContentInfo("剩余时间")
+                .setTicker("鐣寗鏃堕棿姝ｅ湪杩愯")
+                .setContentInfo("鍓╀綑鏃堕棿")
                 .setLargeIcon(appIcon)
                 .setSound(null)
                 .setNumber(FLAG_NORMAL)

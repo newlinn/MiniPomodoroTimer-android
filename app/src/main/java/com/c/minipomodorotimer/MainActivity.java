@@ -1,15 +1,12 @@
 package com.c.minipomodorotimer;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.KeyEvent;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -21,27 +18,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-
-        //alarmNotification = AlarmNotification.get();
-        //alarmNotification.showMinuteNotify(0);
     }
-
-    AlarmNotification alarmNotification = null;
-
-    public void startSrv(View view) {
-        //Intent intent = new Intent(MainActivity.this, ForeService.class);
-        //startService(intent);
-
-    }
-
-    private void foo() {
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
-        long trigger = SystemClock.elapsedRealtime() + 60 * 1000;
-        Intent alarmRcv = new Intent(this, AlarmReceiver.class);
-        PendingIntent piAlarmBroad = PendingIntent.getBroadcast(this, 0, alarmRcv, 0);
-        alarmMgr.setExact(AlarmManager.ELAPSED_REALTIME, trigger, piAlarmBroad);
-    }
-
 
     long exitTime = 0;
 
@@ -51,9 +28,8 @@ public class MainActivity extends Activity {
         System.exit(0);
     }
 
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        boolean isWorking = true;
+        boolean isWorking = false;
         if (isWorking) {
             AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
             alert.setTitle("提示")
@@ -77,7 +53,7 @@ public class MainActivity extends Activity {
             if (KeyEvent.KEYCODE_BACK == keyCode
                     && KeyEvent.ACTION_DOWN == event.getAction()) {
                 if ((System.currentTimeMillis() - exitTime) > 2000) {
-                    Toast.makeText(MyApplication.getContext(), "再按一次退出程序！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "再按一次退出程序！", Toast.LENGTH_SHORT).show();
                     exitTime = System.currentTimeMillis();
                 } else {
                     exit();
