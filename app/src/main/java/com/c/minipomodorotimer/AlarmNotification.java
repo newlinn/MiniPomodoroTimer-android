@@ -15,9 +15,9 @@ public class AlarmNotification {
 
     private static AlarmNotification alarmNotification = null;
 
-    public static AlarmNotification get(){
+    public static AlarmNotification get(Context context){
         if (alarmNotification == null){
-            alarmNotification = new AlarmNotification(MyApplication.getContext());
+            alarmNotification = new AlarmNotification(context);
         }
         return alarmNotification;
     }
@@ -26,21 +26,7 @@ public class AlarmNotification {
     {
         this.context = context;
         notificationMgr = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        appIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
-        notification = new Notification.Builder(this.context)
-                .setContentTitle("番茄时间正在运行")
-                .setContentText("ContentText")
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setTicker("番茄时间正在运行")
-                .setContentInfo("")
-                .setLargeIcon(appIcon)
-                .setSound(null)
-                .setNumber(FLAG_NORMAL)
-                .setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .build();
-        notification.flags = Notification.FLAG_ONGOING_EVENT;
-        notificationMgr.notify(FLAG_NORMAL, notification);
+        showStartNotify();
     }
 
     Context context;
@@ -54,18 +40,34 @@ public class AlarmNotification {
         notificationMgr.cancelAll();
     }
 
-    public void showStartNotify()
+    private void showStartNotify() {
+        appIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
+        notification = new Notification.Builder(this.context)
+                .setContentTitle("番茄时间")
+                .setContentText("ContentText")
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setTicker("番茄时间")
+                .setContentInfo("")
+                .setLargeIcon(appIcon)
+                .setSound(null)
+                .setNumber(FLAG_NORMAL)
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setVibrate(null)
+                .setSound(null)
+                .setDefaults(notification.FLAG_ONGOING_EVENT)
+                .build();
+        notificationMgr.notify(FLAG_NORMAL, notification);
+    }
+
+    //休息提示
+    public void showBreakNotify()
     {
 
     }
 
-    public void showEndNotify()
-    {
-
-    }
-
-    public void showMinuteNotify(int minute)
-    {
+    //运行提示
+    public void showMinuteNotify(int minute) {
         notification = new Notification.Builder(this.context)
                 .setContentTitle("番茄时间正在运行")
                 .setContentText("ContentText")
@@ -76,9 +78,10 @@ public class AlarmNotification {
                 .setSound(null)
                 .setNumber(FLAG_NORMAL)
                 .setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
+                .setVibrate(null)
+                .setSound(null)
+                .setDefaults(Notification.DEFAULT_ALL | notification.FLAG_ONGOING_EVENT)
                 .build();
-        notification.flags = Notification.FLAG_ONGOING_EVENT;
         notificationMgr.notify(FLAG_NORMAL, notification);
     }
 

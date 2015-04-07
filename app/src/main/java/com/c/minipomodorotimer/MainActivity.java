@@ -2,12 +2,16 @@ package com.c.minipomodorotimer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -18,12 +22,23 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        notification = AlarmNotification.get(MainActivity.this);
+        tv = (TextView) findViewById(R.id.tvHello);
+
+        workDownTimer = new WorkDownTimer(1000*200, 1000*2);
+        circleProgressBar = (CircleProgressBar)findViewById(R.id.circleProgressbar);
+        circleProgressBar.setMaxProgress(1000*200);
+        tvCount =(CountView)findViewById(R.id.tvCount);
     }
 
-    long exitTime = 0;
+    CountView tvCount;
+    AlarmNotification notification;
 
-    private void exit()
-    {
+    long exitTime = 0;
+    static final int intervalBack = 2000;
+
+    private void exit() {
+        notification.cancelAll();
         finish();
         System.exit(0);
     }
@@ -52,7 +67,7 @@ public class MainActivity extends Activity {
         } else {
             if (KeyEvent.KEYCODE_BACK == keyCode
                     && KeyEvent.ACTION_DOWN == event.getAction()) {
-                if ((System.currentTimeMillis() - exitTime) > 2000) {
+                if ((System.currentTimeMillis() - exitTime) > intervalBack) {
                     Toast.makeText(MainActivity.this, "再按一次退出程序！", Toast.LENGTH_SHORT).show();
                     exitTime = System.currentTimeMillis();
                 } else {
@@ -64,4 +79,37 @@ public class MainActivity extends Activity {
 
         return super.onKeyDown(keyCode, event);
     }
+
+    int minute = 0;
+    TextView tv;
+    CircleProgressBar circleProgressBar;
+    int progress = 0;
+    WorkDownTimer workDownTimer;
+
+    public void notification(View view) {
+        workDownTimer.start();
+    }
+
+    private class WorkDownTimer extends CountDownTimer{
+        public WorkDownTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long l) {
+            if (minute > 25)
+                minute = 0;
+            notification.showMinuteNotify(minute++);
+            tv.setText(String.valueOf(minute));
+            progress = progress + 1000*2;
+            circleProgressBar.setProgress(progress);
+            tvCount.showNumberWithAnimation(progress);
+        }
+
+        @Override
+        public void onFinish() {
+
+        }
+    }
+
 }
