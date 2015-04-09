@@ -67,8 +67,6 @@ public class CircleProgressBar extends View {
 
     }
 
-
-
     public int getMaxProgress() {
         return maxProgress;
     }

@@ -2,33 +2,45 @@ package com.c.minipomodorotimer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 public class MainActivity extends Activity {
+
+    DrawerLayout drawerLayout;
+    Button btnOpenDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         notification = AlarmNotification.get(MainActivity.this);
         tv = (TextView) findViewById(R.id.tvHello);
 
-        workDownTimer = new WorkDownTimer(1000*200, 1000*2);
-        circleProgressBar = (CircleProgressBar)findViewById(R.id.circleProgressbar);
-        circleProgressBar.setMaxProgress(1000*200);
-        tvCount =(CountView)findViewById(R.id.tvCount);
+        workDownTimer = new WorkDownTimer(1000 * 200, 1000 * 2);
+        circleProgressBar = (CircleProgressBar) findViewById(R.id.circleProgressbar);
+        circleProgressBar.setMaxProgress(1000 * 200);
+        tvCount = (CountView) findViewById(R.id.tvCount);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        btnOpenDrawer = (Button) findViewById(R.id.btnOpenDrawer);
+        btnOpenDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (drawerLayout.isDrawerOpen(Gravity.LEFT))
+                    drawerLayout.closeDrawer(Gravity.LEFT);
+                else
+                    drawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
     }
 
     CountView tvCount;
@@ -90,7 +102,7 @@ public class MainActivity extends Activity {
         workDownTimer.start();
     }
 
-    private class WorkDownTimer extends CountDownTimer{
+    private class WorkDownTimer extends CountDownTimer {
         public WorkDownTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
@@ -101,7 +113,7 @@ public class MainActivity extends Activity {
                 minute = 0;
             notification.showMinuteNotify(minute++);
             tv.setText(String.valueOf(minute));
-            progress = progress + 1000*2;
+            progress = progress + 1000 * 2;
             circleProgressBar.setProgress(progress);
             tvCount.showNumberWithAnimation(progress);
         }
